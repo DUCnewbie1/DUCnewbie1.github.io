@@ -1,162 +1,163 @@
 [
-{
-	"uri": "//localhost:1313/vi/1-introduction/",
-	"title": "Giới thiệu",
-	"tags": [],
-	"description": "",
-	"content": "Trong WorkShop chúng ta tham gia cách xây dựng một luồng CI/CD pipeline tự động để triển khai website lên AWS, sử dụng các công cụ phổ biến như Jenkins, Docker, Ansible và Kubernetes.\nNội dung:\nEC2(Amazon Elastic Compute Cloud) EKS (Amazon Elastic Kubernetes Service) IAM (Identity and Access Management) CloudFormation EC2(Amazon Elastic Compute Cloud) Đây là dịch vụ cung cấp máy chủ ảo (virtual server), được sử dụng để cài đặt và chạy các công cụ như Jenkins, Ansible, và Kubernetes. EC2 cho phép người dùng tạo và quản lý các máy chủ ảo theo nhu cầu, cung cấp môi trường linh hoạt để triển khai ứng dụng. EKS (Amazon Elastic Kubernetes Service) EKS là dịch vụ Kubernetes được quản lý bởi AWS, giúp người dùng dễ dàng tạo và quản lý các cụm Kubernetes. Trong tài liệu này, EKS được sử dụng để triển khai ứng dụng lên Kubernetes cluster. IAM (Identity and Access Management) IAM là dịch vụ quản lý quyền truy cập và bảo mật cho tài khoản AWS. Tài liệu sử dụng IAM để tạo role và cấp quyền cho các dịch vụ AWS (ví dụ như eksctl) truy cập và quản lý tài nguyên. CloudFormation CloudFormation là dịch vụ cho phép người dùng tạo và quản lý tài nguyên AWS một cách tự động bằng cách sử dụng các template định sẵn. Tài liệu đề cập đến CloudFormation trong quá trình tạo EKS cluster. "
-},
-{
-	"uri": "//localhost:1313/vi/",
-	"title": "Xây dựng CI/CD pipeline dựa trên máy chủ EC2 cho trang web",
-	"tags": [],
-	"description": "",
-	"content": "Dự án AWS: Xây dựng CI/CD pipeline dựa trên máy chủ EC2 cho trang web Tổng quan Trong WorkShop chúng ta tham gia cách xây dựng một luồng CI/CD pipeline tự động để triển khai website lên AWS, sử dụng các công cụ phổ biến như Jenkins, Docker, Ansible và Kubernetes.\nNội dung chính Giới thiệu Chuẩn bị Máy chủ Jenkins Máy chủ Ansible Máy chủ K8s Kiểm thử và Demo Dọn dẹp tài nguyên "
-},
-{
-	"uri": "//localhost:1313/vi/4-ansible-server/4.1-ansible-install/",
-	"title": "Cài đặt Ansible",
-	"tags": [],
-	"description": "",
-	"content": "Bây giờ bản sẽ cài đặt Ansible trên phiên bản máy chủ EC2”AnsibleServer” của mình.\nĐầu tiên các bạn connect vào EC2 AnsibleSever tương tự bước Cài đặt Jenkins Chọn Project: Maven \u0026ndash;\u0026gt; Language: Java \u0026ndash;\u0026gt; SpringBoot: 3.3.3 \u0026ndash;\u0026gt; Packaging: Jar \u0026ndash;\u0026gt; Java: 22 Thực hiện lênh: sudo amazon-linux-extras install ansible2 Check phiên bản ansible, ta dùng lệnh: ansible --version Cấu hình Ansible: Kubernetes Server, SSH key Đi tới Bảng điều khiển → Quản lý Jenkins → Cấu hình hệ thống → Các plugin có sẵn Sau đó nhập Xuất bản qua SSH vào hộp tìm kiếm. Sau đó nhấn Install để cài đặt. Đi tới Bảng điều khiển → Quản lý Jenkins → Cấu hình hệ thống → Xuất bản qua SSH. Nhập tất cả dữ liệu cần thiết của máy chủ EC2 Ansible Server trong phần này: Sau khi nhấn nút Áp dụng và Lưu Tiếp theo nhấn vào phần kiểm tra cấu hình để xác nhận Plugin đã hoạt động. "
-},
-{
-	"uri": "//localhost:1313/vi/3-jenkins-server/3.1-install-jenkins/",
-	"title": "Cài đặt Jenkins",
-	"tags": [],
-	"description": "",
-	"content": "Bây giờ bạn cần tải xuống Jenkins trên phiên bản máy chủ ảo EC2 của mình.\nTruy cập trang web tải xuống Jenkins Bạn có thể thấy các tùy chọn Bản phát hành ổn định (LTS) và Bản phát hành thường xuyên (Hàng tuần). Chọn tùy chọn Red Hat/Fedora/Alma/Rocky/CentOS LTS. Bạn vào trang DashBoard Ec2 chọn Ec2 JenkinsServer mà bạn tạo sau do chon Connect Chọn Connect Sao chép lệnh sau và thực thi lệnh đó để tải xuống các tệp Jenkins từ kho lưu trữ Jenkins trên Internet và lưu chúng vào vị trí được chỉ định trên phiên bản máy chủ ảo EC2 của bạn. sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo Nhập khóa Jenkins Để hoàn tất quá trình cài đặt Jenkins, chúng ta cần nhập khóa Jenkins. Để nhập khóa Jenkins, chúng ta cần sao chép lệnh sau và thực thi nó. sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key Bằng cách này, trình quản lý gói rpm có thể xác minh rằng các gói Jenkins bạn cài đặt chính xác là những gói do dự án Jenkins xuất bản và chúng không bị giả mạo hoặc bị hỏng.\nCài đặt Java Để chạy Jenkins, chúng ta cần cài đặt Java trên phiên bản máy chủ ảo EC2 của mình. Để cài đặt Java , hãy sử dụng lệnh này. sudo amazon-linux-extras install java-openjdk17 -y Đường dẫn này có thể thay đổi tùy thuộc vào thời gian bạn thực hiện workshop này. Xác mình phiên bản Java trên máy chủ đã cài đặt\nCài đặt fontconfig Để chạy Jenkins, bạn cần cài đặt fontconfig trên phiên bản máy chủ ảo EC2 của chúng tôi. Sử dụng lệnh này: sudo yum install fontconfig java-17-openjdk -y Fontconfig là một thư viện được thiết kế để cung cấp cấu hình phông chữ, tùy chỉnh và truy cập ứng dụng trên toàn hệ thống. Nó được Jenkins yêu cầu vì Jenkins có tính năng hiển thị phông chữ. Cài đặt Jenkins Trong các bước trước, bạn đã định cấu hình phiên bản máy chủ ảo EC2 để sử dụng kho lưu trữ Jenkins cụ thể, sau đó nhập khóa GPG được liên kết với kho lưu trữ này. Bây giờ, bạn cần chạy lệnh sẽ tìm kiếm tất cả các kho lưu trữ mà nó biết, bao gồm cả kho Jenkins mà bạn đã thêm, để tìm gói Jenkins. Sau khi tìm thấy gói Jenkins trong kho Jenkins, nó sẽ tải xuống và cài đặt gói đó. Chạy lệnh này: sudo yum install jenkins -y Bắt đầu Jenkins sudo systemctl start jenkins sudo systemctl status jenkins Truy cập Jenkins Để truy cập ứng dụng Jenkins, hãy mở bất kỳ trình duyệt web nào và nhập địa chỉ IP công cộng hoặc tên miền của phiên bản EC2 của bạn, sau đó là cổng 8080. http://\u0026lt;your-ec2-ip\u0026gt;:8080 Tạo đường dẫn Jenkins mới Lần đầu tiên bạn truy cập Jenkins, nó sẽ bị khóa bằng mật khẩu được tạo tự động. Bạn cần hiển thị mật khẩu này bằng lệnh sau: sudo cat /var/lib/jenkins/secrets/initialAdminPassword Sao chép mật khẩu này, quay lại trình duyệt của bạn, dán nó vào trường Mật khẩu quản trị viên và nhấp vào \u0026ldquo;Tiếp tục\u0026rdquo;. Sau đó bạn sẽ có thể nhìn thấy trang web này. Bây giờ, bạn có thể sử dụng Máy chủ Jenkins của mình. Sau đó tạo một Item mới trong Jenkins với những thông tin như sau: "
-},
-{
-	"uri": "//localhost:1313/vi/5-k8s-server/5.1-install-kubectl-and-eksctl/",
-	"title": "Cài đặt kubectl &amp; eksctl",
-	"tags": [],
-	"description": "",
-	"content": " Ta khởi động máy chủ EC2 Kubernetes. Bây giờ, bạn cần kiểm tra phiên bản aws-cli cũ trên phiên bản EC2, nếu phiên bản đã cũ bạn cần cập nhật nó. Để làm được điều đó, hãy truy cập AWS → Tài liệu → Giao diện dòng lệnh AWS → Hướng dẫn sử dụng cho Phiên bản 2. Đầu tiên các bạn connect vào EC2 K8sServer tương tự bước Cài đặt Jenkins Đầu tiên, thực hiện lệnh này để tải xuống awscli phiên bản 2. curl \u0026#34;https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip\u0026#34; -o \u0026#34;awscliv2 Thứ hai, bạn cần thực thi lệnh này để giải nén kho lưu trữ awscli phiên bản 2. unzip awscliv2.zip Thứ ba, bạn nên thực hiện lệnh này để cài đặt awscli phiên bản 2. sudo ./aws/install Cài đặt eksctl Trước tiên ta cài đặt eksctl Eksctl là một công cụ dòng lệnh khác được thiết kế riêng cho dịch vụ Amazon EKS. Eksctl có thể được sử dụng để tạo cụm AWS EKS, quản lý nhóm nút và thực hiện các tác vụ dành riêng cho EKS, chẳng hạn như tích hợp với vai trò IAM và các dịch vụ AWS khác bằng cách loại bỏ phần lớn việc quản lý và thiết lập cơ sở hạ tầng AWS. Thực hiện lệnh tải kubectl. curl --silent --location \u0026#34;https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz\u0026#34; | tar xz -C /tmp "
-},
-{
-	"uri": "//localhost:1313/vi/2-preparation/2.1-create-vpc/",
-	"title": "Tạo VPC",
-	"tags": [],
-	"description": "",
-	"content": "Chúng ta sẽ cần một IAM User có khả năng truy cập vào S3 bucket để tải lên, lấy và xóa hình ảnh trong bucket\nĐến trang VPC bằng cách: Nhập VPC vào thanh tìm kiếm dịch vụ và chọn ‘VPC’ Từ ngăn bên trái của bảng điều khiển VPC, chọn VPC rồi nhấp vào nút Create VPC. Trong Create VPC Chon Only VPC Nhập name Tag sau đó tạo Tags như trong hướng dẫn Tiếp đến chọn Create VPC Trạng thái tạo thành công Lần lượt tạo ra 3 Public subnet cho 3 máy chủ EC2 Truy cập VPC =\u0026gt; Subnet =\u0026gt; Nhấn Create subnet Thông tin Public subnet 1 Thông tin Public subnet 2 Thông tin Public subnet 3 Cấu hình Route table VPC Route table (bảng định tuyến) trong AWS VPC (Virtual Private Cloud) có vai trò quan trọng trong việc xác định cách thức các gói tin (packets) được chuyển hướng giữa các mạng và các subnet trong môi trường VPC. Với VPC vừa tạo đã có sẵn 3 Public subnet giành cho 3 máy chủ, Ta tiến hành cấu hình route table cho chúng. "
-},
-{
-	"uri": "//localhost:1313/vi/6-test-demo/6.1-ci-cd-pipeline-deployment/",
-	"title": "Triển khai CI/CD pipeline",
-	"tags": [],
-	"description": "",
-	"content": " Tạo Jenkins Job cho CD Giờ đây, playbook Kubernetes, Ansible và Ansible cho các tác vụ Kubernetes đều đã được thiết lập và sẵn sàng hoạt động, bạn có thể tích hợp nó với Jenkins. JenkinsServer → Jenkins Dashboard → New Item. Tạo dự án Jenkins Freestyle mới với tên CD-Job. Nhấp vào nút “OK”. Chuyển đến phần “Hành động sau xây dựng”. Nhấp vào nút “Thêm hành động sau khi xây dựng”. Chọn tùy chọn “Gửi tạo phẩm xây dựng qua SSH”. Chọn “AnsibleServer” làm Máy chủ SSH. Thêm lệnh này vào đầu vào “lệnh thực thi”. sudo -u ansible-admin ansible-playbook /opt/docker/kubernetes-hello-app.yml Tích hợp CD-Job vào luồng CI/CD hoàn chỉnh. Nhấp vào nút “Áp dụng” và “Lưu”. Đi tới bảng điều khiển Jenkins → CI_CD_Pipeline → Định cấu hình → phần Hành động sau xây dựng. Nhấp vào nút Thêm hành động sau khi xây dựng. Chọn tùy chọn Xây dựng các dự án khác. Đi tới phần Xây dựng các dự án khác. Chọn tùy chọn Chỉ kích hoạt nếu bản dựng ổn định. Thêm CD-Job vào đầu vào Dự án xây dựng. Cuối cùng trong Item CI/CD pipeline trước đó, Di chuyển từ Jenkins Dashboad =\u0026gt; Tên CI/CD của bạn =\u0026gt; Configuration "
-},
-{
-	"uri": "//localhost:1313/vi/4-ansible-server/4.2-docker-install/",
-	"title": "Cài đặt Docker",
-	"tags": [],
-	"description": "",
-	"content": "Bây giờ bạn cần cài đặt docker trên phiên bản Ansible EC2 của mình.\nĐể làm điều đó bạn cần tạo một thư mục docker mới. sudo mkdir /opt/docker Bây giờ, khi Docker được cài đặt trên phiên bản Ansible EC2, bạn có thể khởi chạy nó bằng cách thực hiện lệnh tiếp theo. sudo systemctl start docker Khi Docker được khởi động, bạn có thể thực hiện lệnh tiếp theo sudo systemctl status docker "
-},
-{
-	"uri": "//localhost:1313/vi/5-k8s-server/5.2-create-iam-role/",
-	"title": "Cấu hình IAM Role",
-	"tags": [],
-	"description": "",
-	"content": " Bạn cần tạo 1 IAM role Đầu tiên, Nhập IAM chọn IAM để vào trang IAM Chọn Role ở thanh bên trái sau đó chọn Create role Nhập Role name Eksctl_Role sau đó chọn Create role Chọn EC2 KubernetesServer sau đó chọn Action -\u0026gt; Security -\u0026gt; Modify IAM role -\u0026gt; Chọn IAM role vừa tạo "
-},
-{
-	"uri": "//localhost:1313/vi/2-preparation/",
-	"title": "Chuẩn bị",
-	"tags": [],
-	"description": "",
-	"content": "Nội dung chính Tạo VPC Tạo EC2 Intance "
-},
-{
-	"uri": "//localhost:1313/vi/6-test-demo/6.2-test/",
-	"title": "Demo",
-	"tags": [],
-	"description": "",
-	"content": " Nhấn chạy luồng CI/CD Nhấn vô phiên bản luồng để kiểm tra trạng thái của đường ống CI/CD Pipeline đã hoạt động. Giờ đây bạn có thể sử dụng đường ống này cho quy trình phát triển phần mềm của mình để tích hợp và triển khai liên tục các phiên bản code. Để quan sát website đã được triển khai trên cụm Kubernetes. Trong máy chủ Kubernetes Server, ta gõ lệnh: kubectl get service hmddevops-hello-app-service Kubernetes sẽ hiển thị địa chỉ external-ip. Ta copy mã này vào thêm đuôi “:8080 ” để chạy website lên. Kết quả thu được từ việc này: "
-},
-{
-	"uri": "//localhost:1313/vi/3-jenkins-server/3.2-connect-jenkin-to-github/",
-	"title": "Kết nối Jenkins với GitHub",
-	"tags": [],
-	"description": "",
-	"content": "Để kết nối Jenkins với Github, bạn cần:\nCài đặt Github Plugin trong Jenkins. Cấu hình Github Plugin bằng cách cung cấp URL của repository Github. Truy cập Dashboard =\u0026gt; Manage Jenkins =\u0026gt; Tools. Sau đó cập nhật như sau: Cuối cùng, thêm repo cần áp dụng CI/CD. Ta thực hiện di chuyển Dashboard =\u0026gt; “Tên dự án CI/CD” =\u0026gt; configuration. Dán đường link github của dự án cần CI/CD "
-},
-{
-	"uri": "//localhost:1313/vi/2-preparation/2.2-create-ec2-instance/",
-	"title": "Tạo EC2 intance",
-	"tags": [],
-	"description": "",
-	"content": "Tiếp theo Khởi tạo EC2 Instance\nTruy cập dịch vụ EC2 trong của sổ AWS console. Sau khi đã truy cập vào dịch vụ EC2, tiếp theo trong mục Instances chọn Instances\nTiếp đó, chọn Launch instances để tiến hành tạo máy chủ EC2 cho bài lab này Sau khi đã rõ về cấu hình của các máy chủ, ta tạo 3 máy chủ có tên lần lượt là: JenkinsServer, AnsibleServer, K8sServer. Dưới đây là cấu hình chung của các máy chủ sử dụng trong bài lab. Kết thúc bước này, ta vô lại mục Instances sẽ thấy danh mục các máy chú đã được tạo xuất hiện! Tạo \u0026amp; Cấu hình Security Group Bước 1: Truy cập dịch vụ EC2 =\u0026gt; Trong phần Network \u0026amp; Security =\u0026gt; Chọn Security Group Bước 2: Nhấn Create security group tạo một Security Group để cấu hình traffic cho các Server Cấu hình gồm: Chi tiết cấu hình Cấu hình Inbound rules Cấu hình Outbound rules "
-},
-{
-	"uri": "//localhost:1313/vi/3-jenkins-server/3.3-maven-configuration/",
-	"title": "Cấu hình Maven",
-	"tags": [],
-	"description": "",
-	"content": "Để cấu hình Maven trong Jenkins, bạn cần:\nCài đặt Maven Integration Plugin trong kho plugins của Jenkins. Cấu hình đường dẫn đến Maven trên máy chủ Jenkins. Để tải xuống Apache Maven, hãy vào thư mục /opt cd /opt Và sau đó sử dụng lệnh này: sudo wget https://dlcdn.apache.org/maven/maven-3/3.9.4/binaries/apache-maven-3.9.4-b Sử dụng lệnh này để trích xuất Apache Maven từ kho lưu trữ đã tải xuống: sudo tar -xvzf apache-maven-*.tar.gz Sau khi hoàn thành các bước trên: Ta đã sẵn sàng chạy dự án CI/CD Jenkins trên máy chủ JenkinServer EC2 "
-},
-{
-	"uri": "//localhost:1313/vi/3-jenkins-server/",
-	"title": "Máy chủ Jenkins",
-	"tags": [],
-	"description": "",
-	"content": "Nội dung chính Cài đặt Jenkins Kết nối Jenkins với GitHub Cấu hình Maven "
-},
-{
-	"uri": "//localhost:1313/vi/4-ansible-server/4.3-create-ansible-playbook/",
-	"title": "Tạo Ansible Playbook",
-	"tags": [],
-	"description": "",
-	"content": "Bắt đầu bằng cách tạo một tệp playbook Ansible mới.\nSử dụng lệnh sau touch hello-app.yml Sau đó, chỉnh sửa tệp hello-app.yml mới tạo. Mở nó lên để chỉnh sửa bằng lệnh này. vi hello-app.yml Bên trong tập tin, gõ những nội dung sau đây.\n---\r- hosts: ansible\ruser: root\rtasks:\r- name: create docker image\rcommand: docker build -t hello:latest .\rargs:\rchdir: /opt/docker\r- name: create tag to push image onto dockerhub\rcommand: docker tag hello:latest hmddevops/hello:latest\r- name: push docker image onto dockerhub\rcommand: docker push hmddevops/hello:latest "
-},
-{
-	"uri": "//localhost:1313/vi/5-k8s-server/5.3-setting-up-an-eks-cluster/",
-	"title": "Thiết lập cụm EKS",
-	"tags": [],
-	"description": "",
-	"content": " Cụm Amazon EKS (Dịch vụ Kubernetes đàn hồi) là môi trường Kubernetes được quản lý trên AWS, tự động hóa các tác vụ cơ sở hạ tầng phức tạp như thiết lập, thay đổi quy mô và bảo trì. Điều này rất cần thiết vì nó cung cấp nền tảng hiệu quả, an toàn và được tối ưu hóa cho AWS để triển khai, quản lý và mở rộng quy mô các ứng dụng trong bộ chứa, hợp lý hóa các hoạt động và giúp nhà phát triển tập trung vào mã hóa thay vì quản lý cơ sở hạ tầng cơ bản.\nBây giờ là lúc thiết lập cụm EKS của bạn.\nĐể đạt được điều này, hãy làm theo các bước sau:\nSửa đổi lệnh sau với thông tin cụ thể của bạn. eksctl create cluster --name cluster-name \\ --region region-name \\ --node-type instance-type \\ --nodes-min 2 \\ --nodes-max 2 \\ --zones \u0026lt;AZ-1\u0026gt;,\u0026lt;AZ-2\u0026gt; Thực hiện lệnh đã sửa đổi và kiên nhẫn chờ quá trình tạo cụm hoàn tất. Bạn sẽ nhận thấy trạng thái cụm EKS được biểu thị là \u0026ldquo;đang tạo\u0026rdquo; trên trang web AWS CloudFormation. Quy trình tạo cụm thường mất khoảng 20 phút. Sau khi hoàn thành, thiết bị đầu cuối sẽ hiển thị kết quả của quá trình.\n"
-},
-{
-	"uri": "//localhost:1313/vi/4-ansible-server/",
-	"title": "Máy chủ Ansible",
-	"tags": [],
-	"description": "",
-	"content": "Tổng quan\nBây giờ bản sẽ cài đặt Ansible trên phiên bản máy chủ EC2”AnsibleServer” của mình. Nội dung chính Cài đặt Ansible Cài đặt Docker Tạo Ansible Playbook "
-},
-{
-	"uri": "//localhost:1313/vi/5-k8s-server/",
-	"title": "Máy chủ K8s",
-	"tags": [],
-	"description": "",
-	"content": "Tổng quan\nBây giờ bản sẽ cài đặt Ansible trên phiên bản máy chủ EC2”AnsibleServer” của mình. Nội dung chính Cài đặt kubectl \u0026amp; eksctl Cấu hình IAM Role Thiết lập cụm EKS "
-},
-{
-	"uri": "//localhost:1313/vi/6-test-demo/",
-	"title": "Kiểm thử và Demo",
-	"tags": [],
-	"description": "",
-	"content": "Tổng quan\nBây giờ bản sẽ cài đặt Ansible trên phiên bản máy chủ EC2”AnsibleServer” của mình. Nội dung chính Triển khai CI/CD pipeline Demo "
-},
-{
-	"uri": "//localhost:1313/vi/7-clean-up-resources/",
-	"title": "Dọn dẹp tài nguyên",
-	"tags": [],
-	"description": "",
-	"content": "Xóa EKS Cluster Dọn dẹp bằng lệnh kubectl Khi cần dọn dẹp tài nguyên trong môi trường Kubernetes, bạn có thể sử dụng các lệnh kubectl sau để loại bỏ các hoạt động triển khai, nhóm và dịch vụ một cách hiệu quả. Xóa tất cả triển khai . Để xóa tất cả các triển khai, bạn có thể sử dụng lệnh sau. kubectl delete deployments --all Hành động này đảm bảo rằng không còn phiên bản triển khai đang hoạt động nào trong cụm của bạn. Xóa tất cả các nhóm . Nếu bạn cần xóa tất cả các nhóm, cho dù chúng có được quản lý bởi quá trình triển khai hay không, bạn có thể sử dụng lệnh sau. kubectl delete pods --all Việc xóa nhóm có thể giúp đặt lại trạng thái cụm của bạn hoặc chuẩn bị cho quá trình triển khai mới. Xóa tất cả dịch vụ . Để dọn dẹp các dịch vụ hiển thị ứng dụng của bạn trên mạng, bạn có thể sử dụng lệnh sau. kubectl delete services --all Việc xóa dịch vụ có thể dẫn đến thời gian ngừng hoạt động, vì vậy hãy cân nhắc các tác động trước khi tiếp tục.\nXóa cụm Amazon EKS Để xóa tất cả tài nguyên được liên kết với cụm Amazon EKS được chỉ định được tạo bằng eksctl , bao gồm nút công nhân, thành phần mạng và các tài nguyên khác, bạn có thể sử dụng lệnh sau. eksctl delete cluster --name {your cluster name} --region {your region name} eksctl delete cluster --name zufarexplainedit --region eu-north-1 Hãy đảm bảo bạn chắc chắn về việc dừng cụm vì hành động này không thể đảo ngược và sẽ dẫn đến mất dữ liệu. Các dịch vụ được tạo tự động bằng Cloud Fomation nên có thể sót một số tài nguyên cần xóa. Hãy kiểm tra thật kĩ các dịch vụ liên quan đến EKS để đảm bảo các lệnh bên trên xóa sạch các tài nguyên đã tạo, tránh phát sinh chi phí không mong muốn.\nXóa EC2 Instance Trong giao diên AWS console, tìm và di chuyển lại vô dịch vụ EC2 =\u0026gt; “Instance”. Sau đó kiểm tra các instances đang chạy. Check vào Instance cần xóa: Sau đó, trong phần “Instance state” chọn ”Terminate (delete) instance” để xóa máy chủ EC2 đang hoạt động. Xóa dịch vụ trên VPC Trong AWS Console, ta di chuyển đến dịch vụ VPC =\u0026gt; tìm đến phần “VPC Dashboard”. Ở đây sẽ hiện đầy đủ các dịch vụ liên quan đến VPC đang chạy. Chỉ cần xóa hết các dịch vụ đang chạy là đã hoàn thành dọn dẹp tài nguyên. "
-},
-{
-	"uri": "//localhost:1313/vi/categories/",
-	"title": "Categories",
-	"tags": [],
-	"description": "",
-	"content": ""
-},
-{
-	"uri": "//localhost:1313/vi/tags/",
-	"title": "Tags",
-	"tags": [],
-	"description": "",
-	"content": ""
-}]
+  {
+    "uri": "//ducnewbie1.github.io/vi/1-introduction/",
+    "title": "Giới thiệu",
+    "tags": [],
+    "description": "",
+    "content": "Trong WorkShop chúng ta tham gia cách xây dựng một luồng CI/CD pipeline tự động để triển khai website lên AWS, sử dụng các công cụ phổ biến như Jenkins, Docker, Ansible và Kubernetes.\nNội dung:\nEC2(Amazon Elastic Compute Cloud) EKS (Amazon Elastic Kubernetes Service) IAM (Identity and Access Management) CloudFormation EC2(Amazon Elastic Compute Cloud) Đây là dịch vụ cung cấp máy chủ ảo (virtual server), được sử dụng để cài đặt và chạy các công cụ như Jenkins, Ansible, và Kubernetes. EC2 cho phép người dùng tạo và quản lý các máy chủ ảo theo nhu cầu, cung cấp môi trường linh hoạt để triển khai ứng dụng. EKS (Amazon Elastic Kubernetes Service) EKS là dịch vụ Kubernetes được quản lý bởi AWS, giúp người dùng dễ dàng tạo và quản lý các cụm Kubernetes. Trong tài liệu này, EKS được sử dụng để triển khai ứng dụng lên Kubernetes cluster. IAM (Identity and Access Management) IAM là dịch vụ quản lý quyền truy cập và bảo mật cho tài khoản AWS. Tài liệu sử dụng IAM để tạo role và cấp quyền cho các dịch vụ AWS (ví dụ như eksctl) truy cập và quản lý tài nguyên. CloudFormation CloudFormation là dịch vụ cho phép người dùng tạo và quản lý tài nguyên AWS một cách tự động bằng cách sử dụng các template định sẵn. Tài liệu đề cập đến CloudFormation trong quá trình tạo EKS cluster. "
+  },
+  {
+    "uri": "//ducnewbie1.github.io/vi/",
+    "title": "Xây dựng CI/CD pipeline dựa trên máy chủ EC2 cho trang web",
+    "tags": [],
+    "description": "",
+    "content": "Dự án AWS: Xây dựng CI/CD pipeline dựa trên máy chủ EC2 cho trang web Tổng quan Trong WorkShop chúng ta tham gia cách xây dựng một luồng CI/CD pipeline tự động để triển khai website lên AWS, sử dụng các công cụ phổ biến như Jenkins, Docker, Ansible và Kubernetes.\nNội dung chính Giới thiệu Chuẩn bị Máy chủ Jenkins Máy chủ Ansible Máy chủ K8s Kiểm thử và Demo Dọn dẹp tài nguyên "
+  },
+  {
+    "uri": "//ducnewbie1.github.io/vi/4-ansible-server/4.1-ansible-install/",
+    "title": "Cài đặt Ansible",
+    "tags": [],
+    "description": "",
+    "content": "Bây giờ bản sẽ cài đặt Ansible trên phiên bản máy chủ EC2”AnsibleServer” của mình.\nĐầu tiên các bạn connect vào EC2 AnsibleSever tương tự bước Cài đặt Jenkins Chọn Project: Maven \u0026ndash;\u0026gt; Language: Java \u0026ndash;\u0026gt; SpringBoot: 3.3.3 \u0026ndash;\u0026gt; Packaging: Jar \u0026ndash;\u0026gt; Java: 22 Thực hiện lênh: sudo amazon-linux-extras install ansible2 Check phiên bản ansible, ta dùng lệnh: ansible --version Cấu hình Ansible: Kubernetes Server, SSH key Đi tới Bảng điều khiển → Quản lý Jenkins → Cấu hình hệ thống → Các plugin có sẵn Sau đó nhập Xuất bản qua SSH vào hộp tìm kiếm. Sau đó nhấn Install để cài đặt. Đi tới Bảng điều khiển → Quản lý Jenkins → Cấu hình hệ thống → Xuất bản qua SSH. Nhập tất cả dữ liệu cần thiết của máy chủ EC2 Ansible Server trong phần này: Sau khi nhấn nút Áp dụng và Lưu Tiếp theo nhấn vào phần kiểm tra cấu hình để xác nhận Plugin đã hoạt động. "
+  },
+  {
+    "uri": "//ducnewbie1.github.io/vi/3-jenkins-server/3.1-install-jenkins/",
+    "title": "Cài đặt Jenkins",
+    "tags": [],
+    "description": "",
+    "content": "Bây giờ bạn cần tải xuống Jenkins trên phiên bản máy chủ ảo EC2 của mình.\nTruy cập trang web tải xuống Jenkins Bạn có thể thấy các tùy chọn Bản phát hành ổn định (LTS) và Bản phát hành thường xuyên (Hàng tuần). Chọn tùy chọn Red Hat/Fedora/Alma/Rocky/CentOS LTS. Bạn vào trang DashBoard Ec2 chọn Ec2 JenkinsServer mà bạn tạo sau do chon Connect Chọn Connect Sao chép lệnh sau và thực thi lệnh đó để tải xuống các tệp Jenkins từ kho lưu trữ Jenkins trên Internet và lưu chúng vào vị trí được chỉ định trên phiên bản máy chủ ảo EC2 của bạn. sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo Nhập khóa Jenkins Để hoàn tất quá trình cài đặt Jenkins, chúng ta cần nhập khóa Jenkins. Để nhập khóa Jenkins, chúng ta cần sao chép lệnh sau và thực thi nó. sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key Bằng cách này, trình quản lý gói rpm có thể xác minh rằng các gói Jenkins bạn cài đặt chính xác là những gói do dự án Jenkins xuất bản và chúng không bị giả mạo hoặc bị hỏng.\nCài đặt Java Để chạy Jenkins, chúng ta cần cài đặt Java trên phiên bản máy chủ ảo EC2 của mình. Để cài đặt Java , hãy sử dụng lệnh này. sudo amazon-linux-extras install java-openjdk17 -y Đường dẫn này có thể thay đổi tùy thuộc vào thời gian bạn thực hiện workshop này. Xác mình phiên bản Java trên máy chủ đã cài đặt\nCài đặt fontconfig Để chạy Jenkins, bạn cần cài đặt fontconfig trên phiên bản máy chủ ảo EC2 của chúng tôi. Sử dụng lệnh này: sudo yum install fontconfig java-17-openjdk -y Fontconfig là một thư viện được thiết kế để cung cấp cấu hình phông chữ, tùy chỉnh và truy cập ứng dụng trên toàn hệ thống. Nó được Jenkins yêu cầu vì Jenkins có tính năng hiển thị phông chữ. Cài đặt Jenkins Trong các bước trước, bạn đã định cấu hình phiên bản máy chủ ảo EC2 để sử dụng kho lưu trữ Jenkins cụ thể, sau đó nhập khóa GPG được liên kết với kho lưu trữ này. Bây giờ, bạn cần chạy lệnh sẽ tìm kiếm tất cả các kho lưu trữ mà nó biết, bao gồm cả kho Jenkins mà bạn đã thêm, để tìm gói Jenkins. Sau khi tìm thấy gói Jenkins trong kho Jenkins, nó sẽ tải xuống và cài đặt gói đó. Chạy lệnh này: sudo yum install jenkins -y Bắt đầu Jenkins sudo systemctl start jenkins sudo systemctl status jenkins Truy cập Jenkins Để truy cập ứng dụng Jenkins, hãy mở bất kỳ trình duyệt web nào và nhập địa chỉ IP công cộng hoặc tên miền của phiên bản EC2 của bạn, sau đó là cổng 8080. http://\u0026lt;your-ec2-ip\u0026gt;:8080 Tạo đường dẫn Jenkins mới Lần đầu tiên bạn truy cập Jenkins, nó sẽ bị khóa bằng mật khẩu được tạo tự động. Bạn cần hiển thị mật khẩu này bằng lệnh sau: sudo cat /var/lib/jenkins/secrets/initialAdminPassword Sao chép mật khẩu này, quay lại trình duyệt của bạn, dán nó vào trường Mật khẩu quản trị viên và nhấp vào \u0026ldquo;Tiếp tục\u0026rdquo;. Sau đó bạn sẽ có thể nhìn thấy trang web này. Bây giờ, bạn có thể sử dụng Máy chủ Jenkins của mình. Sau đó tạo một Item mới trong Jenkins với những thông tin như sau: "
+  },
+  {
+    "uri": "//ducnewbie1.github.io/vi/5-k8s-server/5.1-install-kubectl-and-eksctl/",
+    "title": "Cài đặt kubectl &amp; eksctl",
+    "tags": [],
+    "description": "",
+    "content": " Ta khởi động máy chủ EC2 Kubernetes. Bây giờ, bạn cần kiểm tra phiên bản aws-cli cũ trên phiên bản EC2, nếu phiên bản đã cũ bạn cần cập nhật nó. Để làm được điều đó, hãy truy cập AWS → Tài liệu → Giao diện dòng lệnh AWS → Hướng dẫn sử dụng cho Phiên bản 2. Đầu tiên các bạn connect vào EC2 K8sServer tương tự bước Cài đặt Jenkins Đầu tiên, thực hiện lệnh này để tải xuống awscli phiên bản 2. curl \u0026#34;https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip\u0026#34; -o \u0026#34;awscliv2 Thứ hai, bạn cần thực thi lệnh này để giải nén kho lưu trữ awscli phiên bản 2. unzip awscliv2.zip Thứ ba, bạn nên thực hiện lệnh này để cài đặt awscli phiên bản 2. sudo ./aws/install Cài đặt eksctl Trước tiên ta cài đặt eksctl Eksctl là một công cụ dòng lệnh khác được thiết kế riêng cho dịch vụ Amazon EKS. Eksctl có thể được sử dụng để tạo cụm AWS EKS, quản lý nhóm nút và thực hiện các tác vụ dành riêng cho EKS, chẳng hạn như tích hợp với vai trò IAM và các dịch vụ AWS khác bằng cách loại bỏ phần lớn việc quản lý và thiết lập cơ sở hạ tầng AWS. Thực hiện lệnh tải kubectl. curl --silent --location \u0026#34;https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz\u0026#34; | tar xz -C /tmp "
+  },
+  {
+    "uri": "//ducnewbie1.github.io/vi/2-preparation/2.1-create-vpc/",
+    "title": "Tạo VPC",
+    "tags": [],
+    "description": "",
+    "content": "Chúng ta sẽ cần một IAM User có khả năng truy cập vào S3 bucket để tải lên, lấy và xóa hình ảnh trong bucket\nĐến trang VPC bằng cách: Nhập VPC vào thanh tìm kiếm dịch vụ và chọn ‘VPC’ Từ ngăn bên trái của bảng điều khiển VPC, chọn VPC rồi nhấp vào nút Create VPC. Trong Create VPC Chon Only VPC Nhập name Tag sau đó tạo Tags như trong hướng dẫn Tiếp đến chọn Create VPC Trạng thái tạo thành công Lần lượt tạo ra 3 Public subnet cho 3 máy chủ EC2 Truy cập VPC =\u0026gt; Subnet =\u0026gt; Nhấn Create subnet Thông tin Public subnet 1 Thông tin Public subnet 2 Thông tin Public subnet 3 Cấu hình Route table VPC Route table (bảng định tuyến) trong AWS VPC (Virtual Private Cloud) có vai trò quan trọng trong việc xác định cách thức các gói tin (packets) được chuyển hướng giữa các mạng và các subnet trong môi trường VPC. Với VPC vừa tạo đã có sẵn 3 Public subnet giành cho 3 máy chủ, Ta tiến hành cấu hình route table cho chúng. "
+  },
+  {
+    "uri": "//ducnewbie1.github.io/vi/6-test-demo/6.1-ci-cd-pipeline-deployment/",
+    "title": "Triển khai CI/CD pipeline",
+    "tags": [],
+    "description": "",
+    "content": " Tạo Jenkins Job cho CD Giờ đây, playbook Kubernetes, Ansible và Ansible cho các tác vụ Kubernetes đều đã được thiết lập và sẵn sàng hoạt động, bạn có thể tích hợp nó với Jenkins. JenkinsServer → Jenkins Dashboard → New Item. Tạo dự án Jenkins Freestyle mới với tên CD-Job. Nhấp vào nút “OK”. Chuyển đến phần “Hành động sau xây dựng”. Nhấp vào nút “Thêm hành động sau khi xây dựng”. Chọn tùy chọn “Gửi tạo phẩm xây dựng qua SSH”. Chọn “AnsibleServer” làm Máy chủ SSH. Thêm lệnh này vào đầu vào “lệnh thực thi”. sudo -u ansible-admin ansible-playbook /opt/docker/kubernetes-hello-app.yml Tích hợp CD-Job vào luồng CI/CD hoàn chỉnh. Nhấp vào nút “Áp dụng” và “Lưu”. Đi tới bảng điều khiển Jenkins → CI_CD_Pipeline → Định cấu hình → phần Hành động sau xây dựng. Nhấp vào nút Thêm hành động sau khi xây dựng. Chọn tùy chọn Xây dựng các dự án khác. Đi tới phần Xây dựng các dự án khác. Chọn tùy chọn Chỉ kích hoạt nếu bản dựng ổn định. Thêm CD-Job vào đầu vào Dự án xây dựng. Cuối cùng trong Item CI/CD pipeline trước đó, Di chuyển từ Jenkins Dashboad =\u0026gt; Tên CI/CD của bạn =\u0026gt; Configuration "
+  },
+  {
+    "uri": "//ducnewbie1.github.io/vi/4-ansible-server/4.2-docker-install/",
+    "title": "Cài đặt Docker",
+    "tags": [],
+    "description": "",
+    "content": "Bây giờ bạn cần cài đặt docker trên phiên bản Ansible EC2 của mình.\nĐể làm điều đó bạn cần tạo một thư mục docker mới. sudo mkdir /opt/docker Bây giờ, khi Docker được cài đặt trên phiên bản Ansible EC2, bạn có thể khởi chạy nó bằng cách thực hiện lệnh tiếp theo. sudo systemctl start docker Khi Docker được khởi động, bạn có thể thực hiện lệnh tiếp theo sudo systemctl status docker "
+  },
+  {
+    "uri": "//ducnewbie1.github.io/vi/5-k8s-server/5.2-create-iam-role/",
+    "title": "Cấu hình IAM Role",
+    "tags": [],
+    "description": "",
+    "content": " Bạn cần tạo 1 IAM role Đầu tiên, Nhập IAM chọn IAM để vào trang IAM Chọn Role ở thanh bên trái sau đó chọn Create role Nhập Role name Eksctl_Role sau đó chọn Create role Chọn EC2 KubernetesServer sau đó chọn Action -\u0026gt; Security -\u0026gt; Modify IAM role -\u0026gt; Chọn IAM role vừa tạo "
+  },
+  {
+    "uri": "//ducnewbie1.github.io/vi/2-preparation/",
+    "title": "Chuẩn bị",
+    "tags": [],
+    "description": "",
+    "content": "Nội dung chính Tạo VPC Tạo EC2 Intance "
+  },
+  {
+    "uri": "//ducnewbie1.github.io/vi/6-test-demo/6.2-test/",
+    "title": "Demo",
+    "tags": [],
+    "description": "",
+    "content": " Nhấn chạy luồng CI/CD Nhấn vô phiên bản luồng để kiểm tra trạng thái của đường ống CI/CD Pipeline đã hoạt động. Giờ đây bạn có thể sử dụng đường ống này cho quy trình phát triển phần mềm của mình để tích hợp và triển khai liên tục các phiên bản code. Để quan sát website đã được triển khai trên cụm Kubernetes. Trong máy chủ Kubernetes Server, ta gõ lệnh: kubectl get service hmddevops-hello-app-service Kubernetes sẽ hiển thị địa chỉ external-ip. Ta copy mã này vào thêm đuôi “:8080 ” để chạy website lên. Kết quả thu được từ việc này: "
+  },
+  {
+    "uri": "//ducnewbie1.github.io/vi/3-jenkins-server/3.2-connect-jenkin-to-github/",
+    "title": "Kết nối Jenkins với GitHub",
+    "tags": [],
+    "description": "",
+    "content": "Để kết nối Jenkins với Github, bạn cần:\nCài đặt Github Plugin trong Jenkins. Cấu hình Github Plugin bằng cách cung cấp URL của repository Github. Truy cập Dashboard =\u0026gt; Manage Jenkins =\u0026gt; Tools. Sau đó cập nhật như sau: Cuối cùng, thêm repo cần áp dụng CI/CD. Ta thực hiện di chuyển Dashboard =\u0026gt; “Tên dự án CI/CD” =\u0026gt; configuration. Dán đường link github của dự án cần CI/CD "
+  },
+  {
+    "uri": "//ducnewbie1.github.io/vi/2-preparation/2.2-create-ec2-instance/",
+    "title": "Tạo EC2 intance",
+    "tags": [],
+    "description": "",
+    "content": "Tiếp theo Khởi tạo EC2 Instance\nTruy cập dịch vụ EC2 trong của sổ AWS console. Sau khi đã truy cập vào dịch vụ EC2, tiếp theo trong mục Instances chọn Instances\nTiếp đó, chọn Launch instances để tiến hành tạo máy chủ EC2 cho bài lab này Sau khi đã rõ về cấu hình của các máy chủ, ta tạo 3 máy chủ có tên lần lượt là: JenkinsServer, AnsibleServer, K8sServer. Dưới đây là cấu hình chung của các máy chủ sử dụng trong bài lab. Kết thúc bước này, ta vô lại mục Instances sẽ thấy danh mục các máy chú đã được tạo xuất hiện! Tạo \u0026amp; Cấu hình Security Group Bước 1: Truy cập dịch vụ EC2 =\u0026gt; Trong phần Network \u0026amp; Security =\u0026gt; Chọn Security Group Bước 2: Nhấn Create security group tạo một Security Group để cấu hình traffic cho các Server Cấu hình gồm: Chi tiết cấu hình Cấu hình Inbound rules Cấu hình Outbound rules "
+  },
+  {
+    "uri": "//ducnewbie1.github.io/vi/3-jenkins-server/3.3-maven-configuration/",
+    "title": "Cấu hình Maven",
+    "tags": [],
+    "description": "",
+    "content": "Để cấu hình Maven trong Jenkins, bạn cần:\nCài đặt Maven Integration Plugin trong kho plugins của Jenkins. Cấu hình đường dẫn đến Maven trên máy chủ Jenkins. Để tải xuống Apache Maven, hãy vào thư mục /opt cd /opt Và sau đó sử dụng lệnh này: sudo wget https://dlcdn.apache.org/maven/maven-3/3.9.4/binaries/apache-maven-3.9.4-b Sử dụng lệnh này để trích xuất Apache Maven từ kho lưu trữ đã tải xuống: sudo tar -xvzf apache-maven-*.tar.gz Sau khi hoàn thành các bước trên: Ta đã sẵn sàng chạy dự án CI/CD Jenkins trên máy chủ JenkinServer EC2 "
+  },
+  {
+    "uri": "//ducnewbie1.github.io/vi/3-jenkins-server/",
+    "title": "Máy chủ Jenkins",
+    "tags": [],
+    "description": "",
+    "content": "Nội dung chính Cài đặt Jenkins Kết nối Jenkins với GitHub Cấu hình Maven "
+  },
+  {
+    "uri": "//ducnewbie1.github.io/vi/4-ansible-server/4.3-create-ansible-playbook/",
+    "title": "Tạo Ansible Playbook",
+    "tags": [],
+    "description": "",
+    "content": "Bắt đầu bằng cách tạo một tệp playbook Ansible mới.\nSử dụng lệnh sau touch hello-app.yml Sau đó, chỉnh sửa tệp hello-app.yml mới tạo. Mở nó lên để chỉnh sửa bằng lệnh này. vi hello-app.yml Bên trong tập tin, gõ những nội dung sau đây.\n---\r- hosts: ansible\ruser: root\rtasks:\r- name: create docker image\rcommand: docker build -t hello:latest .\rargs:\rchdir: /opt/docker\r- name: create tag to push image onto dockerhub\rcommand: docker tag hello:latest hmddevops/hello:latest\r- name: push docker image onto dockerhub\rcommand: docker push hmddevops/hello:latest "
+  },
+  {
+    "uri": "//ducnewbie1.github.io/vi/5-k8s-server/5.3-setting-up-an-eks-cluster/",
+    "title": "Thiết lập cụm EKS",
+    "tags": [],
+    "description": "",
+    "content": " Cụm Amazon EKS (Dịch vụ Kubernetes đàn hồi) là môi trường Kubernetes được quản lý trên AWS, tự động hóa các tác vụ cơ sở hạ tầng phức tạp như thiết lập, thay đổi quy mô và bảo trì. Điều này rất cần thiết vì nó cung cấp nền tảng hiệu quả, an toàn và được tối ưu hóa cho AWS để triển khai, quản lý và mở rộng quy mô các ứng dụng trong bộ chứa, hợp lý hóa các hoạt động và giúp nhà phát triển tập trung vào mã hóa thay vì quản lý cơ sở hạ tầng cơ bản.\nBây giờ là lúc thiết lập cụm EKS của bạn.\nĐể đạt được điều này, hãy làm theo các bước sau:\nSửa đổi lệnh sau với thông tin cụ thể của bạn. eksctl create cluster --name cluster-name \\ --region region-name \\ --node-type instance-type \\ --nodes-min 2 \\ --nodes-max 2 \\ --zones \u0026lt;AZ-1\u0026gt;,\u0026lt;AZ-2\u0026gt; Thực hiện lệnh đã sửa đổi và kiên nhẫn chờ quá trình tạo cụm hoàn tất. Bạn sẽ nhận thấy trạng thái cụm EKS được biểu thị là \u0026ldquo;đang tạo\u0026rdquo; trên trang web AWS CloudFormation. Quy trình tạo cụm thường mất khoảng 20 phút. Sau khi hoàn thành, thiết bị đầu cuối sẽ hiển thị kết quả của quá trình.\n"
+  },
+  {
+    "uri": "//ducnewbie1.github.io/vi/4-ansible-server/",
+    "title": "Máy chủ Ansible",
+    "tags": [],
+    "description": "",
+    "content": "Tổng quan\nBây giờ bản sẽ cài đặt Ansible trên phiên bản máy chủ EC2”AnsibleServer” của mình. Nội dung chính Cài đặt Ansible Cài đặt Docker Tạo Ansible Playbook "
+  },
+  {
+    "uri": "//ducnewbie1.github.io/vi/5-k8s-server/",
+    "title": "Máy chủ K8s",
+    "tags": [],
+    "description": "",
+    "content": "Tổng quan\nBây giờ bản sẽ cài đặt Ansible trên phiên bản máy chủ EC2”AnsibleServer” của mình. Nội dung chính Cài đặt kubectl \u0026amp; eksctl Cấu hình IAM Role Thiết lập cụm EKS "
+  },
+  {
+    "uri": "//ducnewbie1.github.io/vi/6-test-demo/",
+    "title": "Kiểm thử và Demo",
+    "tags": [],
+    "description": "",
+    "content": "Tổng quan\nBây giờ bản sẽ cài đặt Ansible trên phiên bản máy chủ EC2”AnsibleServer” của mình. Nội dung chính Triển khai CI/CD pipeline Demo "
+  },
+  {
+    "uri": "//ducnewbie1.github.io/vi/7-clean-up-resources/",
+    "title": "Dọn dẹp tài nguyên",
+    "tags": [],
+    "description": "",
+    "content": "Xóa EKS Cluster Dọn dẹp bằng lệnh kubectl Khi cần dọn dẹp tài nguyên trong môi trường Kubernetes, bạn có thể sử dụng các lệnh kubectl sau để loại bỏ các hoạt động triển khai, nhóm và dịch vụ một cách hiệu quả. Xóa tất cả triển khai . Để xóa tất cả các triển khai, bạn có thể sử dụng lệnh sau. kubectl delete deployments --all Hành động này đảm bảo rằng không còn phiên bản triển khai đang hoạt động nào trong cụm của bạn. Xóa tất cả các nhóm . Nếu bạn cần xóa tất cả các nhóm, cho dù chúng có được quản lý bởi quá trình triển khai hay không, bạn có thể sử dụng lệnh sau. kubectl delete pods --all Việc xóa nhóm có thể giúp đặt lại trạng thái cụm của bạn hoặc chuẩn bị cho quá trình triển khai mới. Xóa tất cả dịch vụ . Để dọn dẹp các dịch vụ hiển thị ứng dụng của bạn trên mạng, bạn có thể sử dụng lệnh sau. kubectl delete services --all Việc xóa dịch vụ có thể dẫn đến thời gian ngừng hoạt động, vì vậy hãy cân nhắc các tác động trước khi tiếp tục.\nXóa cụm Amazon EKS Để xóa tất cả tài nguyên được liên kết với cụm Amazon EKS được chỉ định được tạo bằng eksctl , bao gồm nút công nhân, thành phần mạng và các tài nguyên khác, bạn có thể sử dụng lệnh sau. eksctl delete cluster --name {your cluster name} --region {your region name} eksctl delete cluster --name zufarexplainedit --region eu-north-1 Hãy đảm bảo bạn chắc chắn về việc dừng cụm vì hành động này không thể đảo ngược và sẽ dẫn đến mất dữ liệu. Các dịch vụ được tạo tự động bằng Cloud Fomation nên có thể sót một số tài nguyên cần xóa. Hãy kiểm tra thật kĩ các dịch vụ liên quan đến EKS để đảm bảo các lệnh bên trên xóa sạch các tài nguyên đã tạo, tránh phát sinh chi phí không mong muốn.\nXóa EC2 Instance Trong giao diên AWS console, tìm và di chuyển lại vô dịch vụ EC2 =\u0026gt; “Instance”. Sau đó kiểm tra các instances đang chạy. Check vào Instance cần xóa: Sau đó, trong phần “Instance state” chọn ”Terminate (delete) instance” để xóa máy chủ EC2 đang hoạt động. Xóa dịch vụ trên VPC Trong AWS Console, ta di chuyển đến dịch vụ VPC =\u0026gt; tìm đến phần “VPC Dashboard”. Ở đây sẽ hiện đầy đủ các dịch vụ liên quan đến VPC đang chạy. Chỉ cần xóa hết các dịch vụ đang chạy là đã hoàn thành dọn dẹp tài nguyên. "
+  },
+  {
+    "uri": "//ducnewbie1.github.io/vi/categories/",
+    "title": "Categories",
+    "tags": [],
+    "description": "",
+    "content": ""
+  },
+  {
+    "uri": "//ducnewbie1.github.io/vi/tags/",
+    "title": "Tags",
+    "tags": [],
+    "description": "",
+    "content": ""
+  }
+]

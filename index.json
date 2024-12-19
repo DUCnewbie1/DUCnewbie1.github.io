@@ -1,162 +1,163 @@
 [
-{
-	"uri": "//localhost:1313/1-introduction/",
-	"title": "Introduction",
-	"tags": [],
-	"description": "",
-	"content": "In the Workshop, we will learn how to build an automated CI/CD pipeline to deploy websites to AWS, using popular tools such as Jenkins, Docker, Ansible and Kubernetes.\nContent:\nEC2(Amazon Elastic Compute Cloud) EKS (Amazon Elastic Kubernetes Service) IAM (Identity and Access Management) CloudFormation EC2(Amazon Elastic Compute Cloud) This is a virtual server service, used to install and run tools such as Jenkins, Ansible, and Kubernetes. EC2 allows users to create and manage virtual servers on demand, providing a flexible environment for deploying applications. EKS (Amazon Elastic Kubernetes Service) EKS is a managed Kubernetes service provided by AWS that makes it easy for users to create and manage Kubernetes clusters. In this document, EKS is used to deploy applications to Kubernetes clusters. IAM (Identity and Access Management) IAM is a service that manages access and security for AWS accounts. The document uses IAM to create roles and grant permissions for AWS services (such as eksctl) to access and manage resources. CloudFormation CloudFormation is a service that allows users to automatically create and manage AWS resources using predefined templates. The document refers to CloudFormation during the process of creating an EKS cluster. "
-},
-{
-	"uri": "//localhost:1313/",
-	"title": "Building EC2 Server-Based CI/CD Pipeline for Websites",
-	"tags": [],
-	"description": "",
-	"content": "AWS Project: Building EC2 Server-Based CI/CD Pipeline for Websites Overview In the Workshop, we will learn how to build an automated CI/CD pipeline to deploy a website to AWS, using popular tools such as Jenkins, Docker, Ansible and Kubernetes.\nMain content Introduction Preparation Jenkins Server Ansible Server K8s Server Testing and Demo Clean-Up-Resources "
-},
-{
-	"uri": "//localhost:1313/6-test-demo/6.1-ci-cd-pipeline-deployment/",
-	"title": "CI/CD pipeline deployment",
-	"tags": [],
-	"description": "",
-	"content": " Create Jenkins Job for CD Now that the Kubernetes, Ansible, and Ansible for Kubernetes playbook are all set up and ready to go, you can integrate it with Jenkins.\nJenkinsServer → Jenkins Dashboard → New Item.\nCreate a new Jenkins Freestyle project named CD-Job.\nClick the “OK” button. Go to the “Post-build actions” section. Click the “Add post-build action” button. Select the “Send build artifacts via SSH” option. Select “AnsibleServer” as SSH Server. Add this command to the “execute command” input. sudo -u ansible-admin ansible-playbook /opt/docker/kubernetes-hello-app.yml Integrate CD-Job into the complete CI/CD flow. Click the “Apply” and “Save” buttons. Go to Jenkins dashboard → CI_CD_Pipeline → Configure → Post-build actions section. Click the Add post-build action button. Select the Build other projects option. Go to the Build other projects section. Select the Trigger only if build is stable option. Add CD-Job to the Build Project input. Finally in the previous CI/CD pipeline Item, Navigate from Jenkins Dashboad =\u0026gt; Your CI/CD Name =\u0026gt; Configuration "
-},
-{
-	"uri": "//localhost:1313/2-preparation/2.1-create-vpc/",
-	"title": "Create VPC",
-	"tags": [],
-	"description": "",
-	"content": "We will need an IAM User with access to the S3 bucket to upload, retrieve and delete images in the bucket\nGo to the VPC page by: Type VPC in the service search bar and select ‘VPC’ From the left pane of the VPC dashboard, select VPC and click the Create VPC button. In Create VPC\nSelect Only VPC Enter the Tag name then create Tags as in the instructions Next select Create VPC Successful creation status Create 3 Public subnets for 3 EC2 servers in turn Access VPC =\u0026gt; Subnet =\u0026gt; Click Create subnet Public subnet 1 information Public subnet 2 information Public subnet 3 information Configure VPC Route table Route table (routing table) in AWS VPC (Virtual Private Cloud) plays an important role in determining how packets are routed between networks and subnets in the VPC environment.\nWith the newly created VPC, there are 3 Public subnets for 3 servers, we proceed to configure the route table for them.\n"
-},
-{
-	"uri": "//localhost:1313/4-ansible-server/4.1-ansible-install/",
-	"title": "Install Ansible",
-	"tags": [],
-	"description": "",
-	"content": "You will now install Ansible on your EC2 “AnsibleServer” instance.\nFirst, connect to EC2 AnsibleSever similar to the step Install Jenkins Select Project: Maven \u0026ndash;\u0026gt; Language: Java \u0026ndash;\u0026gt; SpringBoot: 3.3.3 \u0026ndash;\u0026gt; Packaging: Jar \u0026ndash;\u0026gt; Java: 22 Execute the command: sudo amazon-linux-extras install ansible2 Check the ansible version, we use the command: ansible --version Configure Ansible: Kubernetes Server, SSH key Go to Dashboard → Jenkins Management → System Configuration → Available Plugins Then enter Publish via SSH in the search box. Then click Install to install.\nGo to Dashboard → Jenkins Management → System Configuration → Publish via SSH. Enter all the necessary data of the EC2 Ansible Server in this section:\nAfter clicking the Apply and Save buttons\nNext click on the configuration test section to confirm that the Plugin is working.\n"
-},
-{
-	"uri": "//localhost:1313/3-jenkins-server/3.1-install-jenkins/",
-	"title": "Install Jenkins",
-	"tags": [],
-	"description": "",
-	"content": "Now you need to download Jenkins on your EC2 virtual server instance.\nGo to the Jenkins download page You can see the options Stable Release (LTS) and Regular Release (Weekly). Select the Red Hat/Fedora/Alma/Rocky/CentOS LTS. option. Go to the Ec2 DashBoard page, select the Ec2 JenkinsServer you created later, select Connect Select Connect Copy the following command and execute it to download the Jenkins files from the Jenkins repository on the Internet and save them to the specified location on your EC2 virtual server instance. sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo Import Jenkins Key To complete the Jenkins installation, we need to import the Jenkins key.\nTo import the Jenkins key, we need to copy the following command and execute it.\nsudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key This way, the rpm package manager can verify that the Jenkins packages you install are exactly the ones published by the Jenkins project and that they are not tampered with or corrupted.\nInstall Java To run Jenkins, we need to install Java on our EC2 VM instance. To install Java, use this command. sudo amazon-linux-extras install java-openjdk17 -y This path may change depending on the time you do this workshop. Verify the Java version on the installed server\nInstall fontconfig To run Jenkins, you need to install fontconfig on our EC2 VM instance. Use this command: sudo yum install fontconfig java-17-openjdk -y Fontconfig is a library designed to provide system-wide font configuration, customization, and application access. It is required by Jenkins because Jenkins has font rendering capabilities. Install Jenkins In the previous steps, you configured your EC2 virtual server instance to use a specific Jenkins repository, and then imported the GPG key associated with that repository. Now, you need to run a command that will search all the repositories it knows about, including the Jenkins repository you added, for the Jenkins package. Once it finds the Jenkins package in the Jenkins repository, it will download and install it. Run this command: sudo yum install jenkins -y Start Jenkins sudo systemctl start jenkins sudo systemctl status jenkins Access Jenkins To access the Jenkins application, open any web browser and enter the public IP address or domain name of your EC2 instance, followed by port 8080. http://\u0026lt;your-ec2-ip\u0026gt;:8080 Create a new Jenkins path The first time you access Jenkins, it will be locked with an automatically generated password. You need to reveal this password with the following command: sudo cat /var/lib/jenkins/secrets/initialAdminPassword Copy this password, go back to your browser, paste it into the Admin Password field and click \u0026ldquo;Continue\u0026rdquo;.\nYou will then be able to see this web page.\nNow, you can use your Jenkins Server. Then create a new Item in Jenkins with the following information:\n"
-},
-{
-	"uri": "//localhost:1313/5-k8s-server/5.1-install-kubectl-and-eksctl/",
-	"title": "Install kubectl &amp; eksctl",
-	"tags": [],
-	"description": "",
-	"content": " We start the EC2 Kubernetes server. Now, you need to check the old aws-cli version on the EC2 instance, if the version is old, you need to update it. To do that, go to AWS → Documentation → AWS Command Line Interface → User Guide for Version 2. First, connect to EC2 K8sServer similar to step Install Jenkins First, execute this command to download awscli version 2. curl \u0026#34;https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip\u0026#34; -o \u0026#34;awscliv2 Second, you need to execute this command to unzip the awscli version 2 archive. unzip awscliv2.zip Third, you should execute this command to install awscli version 2. sudo ./aws/install Install eksctl First, we install eksctl Eksctl is another command line tool designed designed specifically for the Amazon EKS service. Eksctl can be used to create AWS EKS clusters, manage node groups, and perform EKS-specific tasks, such as integrating with IAM roles and other AWS services, eliminating much of the AWS infrastructure setup and management. Execute the kubectl load command. curl --silent --location \u0026#34;https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz\u0026#34; | tar xz -C /tmp "
-},
-{
-	"uri": "//localhost:1313/3-jenkins-server/3.2-connect-jenkin-to-github/",
-	"title": "Connect Jenkins to GitHub",
-	"tags": [],
-	"description": "",
-	"content": "To connect Jenkins to Github, you need to:\nInstall Github Plugin in Jenkins. Configure Github Plugin by providing the URL of the Github repository. Go to Dashboard =\u0026gt; Manage Jenkins =\u0026gt; Tools. Then update as follows: Finally, add the repo that needs to apply CI/CD. We move Dashboard =\u0026gt; “CI/CD project name” =\u0026gt; configuration. Paste the github link of the project that needs CI/CD "
-},
-{
-	"uri": "//localhost:1313/2-preparation/2.2-create-ec2-instance/",
-	"title": "Create EC2 instance",
-	"tags": [],
-	"description": "",
-	"content": "Next Initialize EC2 Instance\nAccess the EC2 service in the AWS console window. After accessing the EC2 service, next in the Instances section select Instances\nNext, select Launch instances to proceed to create an EC2 server for this lab\nAfter knowing the configuration of the servers, we create 3 servers named respectively: JenkinsServer, AnsibleServer, K8sServer.\nBelow is the general configuration of the servers used in the lab.\nAfter finishing this step, we go back to Instances and we will see the list of created servers appear! Create \u0026amp; Configure Security Group Step 1: Access EC2 service =\u0026gt; In Network \u0026amp; Security section =\u0026gt; Select Security Group Step 2: Click Create security group to create a Security Group to configure traffic for the Servers Configuration includes: Configuration details Configure Inbound rules Configure Outbound rules "
-},
-{
-	"uri": "//localhost:1313/6-test-demo/6.2-test/",
-	"title": "Demo",
-	"tags": [],
-	"description": "",
-	"content": " Click to run the CI/CD flow Click on the flow version to check the status of the pipeline The CI/CD Pipeline is up and running. You can now use this pipeline for your software development process to integrate and deploy code versions continuously. To view the website deployed on the Kubernetes cluster. In the Kubernetes Server, type the command: kubectl get service hmddevops-hello-app-service Kubernetes will display the external-ip address. We copy this code and add the suffix “:8080” to run the website. The result obtained from this: "
-},
-{
-	"uri": "//localhost:1313/5-k8s-server/5.2-create-iam-role/",
-	"title": "IAM Role Configuration",
-	"tags": [],
-	"description": "",
-	"content": " You need to create an IAM role First, Enter IAM select IAM to enter the IAM page Select Role on the left sidebar then select Create role Enter the Role name Eksctl_Role then select Create role Select EC2 KubernetesServer then select Action -\u0026gt; Security -\u0026gt; Modify IAM role -\u0026gt; Select the newly created IAM role "
-},
-{
-	"uri": "//localhost:1313/4-ansible-server/4.2-docker-install/",
-	"title": "Install Docker",
-	"tags": [],
-	"description": "",
-	"content": "Now you need to install docker on your Ansible EC2 instance.\nTo do that you need to create a new docker directory. sudo mkdir /opt/docker Now that Docker is installed on your Ansible EC2 instance, you can launch it by executing the following command. sudo systemctl start docker Once Docker is started, you can execute the following command sudo systemctl status docker "
-},
-{
-	"uri": "//localhost:1313/2-preparation/",
-	"title": "Preparation",
-	"tags": [],
-	"description": "",
-	"content": "Main content Create VPC Create EC2 Intance "
-},
-{
-	"uri": "//localhost:1313/4-ansible-server/4.3-create-ansible-playbook/",
-	"title": "Create Ansible Playbook",
-	"tags": [],
-	"description": "",
-	"content": "Start by creating a new Ansible playbook file.\nUse the following command touch hello-app.yml Then, edit the newly created hello-app.yml file. Open it for editing with this command. vi hello-app.yml Inside the file, type the following.\n---\r- hosts: ansible\ruser: root\rtasks:\r- name: create docker image\rcommand: docker build -t hello:latest .\rargs:\rchdir: /opt/docker\r- name: create tag to push image onto dockerhub\rcommand: docker tag hello:latest hmddevops/hello:latest\r- name: push docker image onto dockerhub\rcommand: docker push hmddevops/hello:latest "
-},
-{
-	"uri": "//localhost:1313/3-jenkins-server/",
-	"title": "Jenkins Server",
-	"tags": [],
-	"description": "",
-	"content": "Main content Install Jenkins Connect Jenkins to GitHub Maven Configuration "
-},
-{
-	"uri": "//localhost:1313/3-jenkins-server/3.3-maven-configuration/",
-	"title": "Maven Configuration",
-	"tags": [],
-	"description": "",
-	"content": "To configure Maven in Jenkins, you need to:\nInstall the Maven Integration Plugin in the Jenkins plugins repository. Configure the path to Maven on the Jenkins server. To download Apache Maven, go to /opt directory cd /opt And then use this command: sudo wget https://dlcdn.apache.org/maven/maven-3/3.9.4/binaries/apache-maven-3.9.4-b Use this command to extract Apache Maven from the downloaded archive: sudo tar -xvzf apache-maven-*.tar.gz After completing the above steps: We are ready to run the Jenkins CI/CD project on the JenkinServer EC2 server "
-},
-{
-	"uri": "//localhost:1313/5-k8s-server/5.3-setting-up-an-eks-cluster/",
-	"title": "Setting Up an EKS Cluster",
-	"tags": [],
-	"description": "",
-	"content": " The Amazon EKS (Elastic Kubernetes Service) cluster is a managed Kubernetes environment on AWS that automates complex infrastructure tasks like setup, scaling, and maintenance. This is essential because it provides an efficient, secure, and AWS-optimized platform for deploying, managing, and scaling containerized applications, streamlining operations and allowing developers to focus on coding instead of managing the underlying infrastructure.\nNow it\u0026rsquo;s time to set up your EKS cluster.\nTo achieve this, follow these steps:\nModify the following command with your specific information. eksctl create cluster --name cluster-name \\ --region region-name \\ --node-type instance-type \\ --nodes-min 2 \\ --nodes-max 2 \\ --zones \u0026lt;AZ-1\u0026gt;,\u0026lt;AZ-2\u0026gt; Execute the modified command and wait patiently for the cluster creation process to complete. You will notice the EKS cluster status is indicated as \u0026ldquo;creating\u0026rdquo; on the AWS CloudFormation website. The cluster creation process usually takes about 20 minutes. Once completed, the terminal will display the result of the process.\n"
-},
-{
-	"uri": "//localhost:1313/4-ansible-server/",
-	"title": "Ansible Server",
-	"tags": [],
-	"description": "",
-	"content": "Overview\nNow you will install Ansible on your EC2 “AnsibleServer” server instance. Main content Install Ansible Install Docker Create Ansible Playbook "
-},
-{
-	"uri": "//localhost:1313/5-k8s-server/",
-	"title": "K8s Server",
-	"tags": [],
-	"description": "",
-	"content": "Overview\nNow you will install Ansible on your EC2 “AnsibleServer” instance. Main content Install kubectl \u0026amp; eksctl Configure IAM Role Setting up an EKS cluster "
-},
-{
-	"uri": "//localhost:1313/6-test-demo/",
-	"title": "Testing and Demo",
-	"tags": [],
-	"description": "",
-	"content": "Overview\nNow you will install Ansible on your EC2 “AnsibleServer” server instance. Main content CI/CD pipeline deployment Demo "
-},
-{
-	"uri": "//localhost:1313/7-clean-up-resources/",
-	"title": "Cleaning up resources",
-	"tags": [],
-	"description": "",
-	"content": "Delete EKS Cluster Cleanup with kubectl command When you need to clean up resources in your Kubernetes environment, you can use the following kubectl commands to efficiently remove deployments, pods, and services. Delete all deployments. To delete all deployments, you can use the following command. kubectl delete deployments --all This action ensures that there are no active deployment instances left in your cluster. Delete all pods. If you need to delete all pods, whether they are managed by the deployment process or not, you can use the following command. kubectl delete pods --all Deleting a pod can help reset the state of your cluster or prepare it for a new deployment. Delete all services. To clean up services that expose your application to the network, you can use the following command.\nkubectl delete services --all Deleting services can cause downtime, so consider the implications before proceeding.\nDeleting an Amazon EKS cluster To delete all resources associated with a specified Amazon EKS cluster created with eksctl , including worker nodes, networking components, and other resources, you can use the following command. eksctl delete cluster --name {your cluster name} --region {your region name} eksctl delete cluster --name zufarexplainedit --region eu-north-1 Make sure you are sure about stopping the cluster as this action is irreversible and will result in data loss. Services are automatically created by Cloud Formation so there may be some resources that need to be deleted. Please check the EKS related services carefully to make sure the above commands delete the created resources, avoiding unwanted costs.\nDelete EC2 Instance In the AWS console interface, find and move back to the EC2 service =\u0026gt; “Instance”. Then check the running instances. Check the Instance to be deleted: Then, in the “Instance state” section, select “Terminate (delete) instance” to delete the active EC2 server. Delete services on VPC In AWS Console, we move to VPC service =\u0026gt; find “VPC Dashboard”. Here will display all services related to the running VPC. Just delete all running services to complete resource cleaning. "
-},
-{
-	"uri": "//localhost:1313/categories/",
-	"title": "Categories",
-	"tags": [],
-	"description": "",
-	"content": ""
-},
-{
-	"uri": "//localhost:1313/tags/",
-	"title": "Tags",
-	"tags": [],
-	"description": "",
-	"content": ""
-}]
+  {
+    "uri": "//ducnewbie1.github.io/1-introduction/",
+    "title": "Introduction",
+    "tags": [],
+    "description": "",
+    "content": "In the Workshop, we will learn how to build an automated CI/CD pipeline to deploy websites to AWS, using popular tools such as Jenkins, Docker, Ansible and Kubernetes.\nContent:\nEC2(Amazon Elastic Compute Cloud) EKS (Amazon Elastic Kubernetes Service) IAM (Identity and Access Management) CloudFormation EC2(Amazon Elastic Compute Cloud) This is a virtual server service, used to install and run tools such as Jenkins, Ansible, and Kubernetes. EC2 allows users to create and manage virtual servers on demand, providing a flexible environment for deploying applications. EKS (Amazon Elastic Kubernetes Service) EKS is a managed Kubernetes service provided by AWS that makes it easy for users to create and manage Kubernetes clusters. In this document, EKS is used to deploy applications to Kubernetes clusters. IAM (Identity and Access Management) IAM is a service that manages access and security for AWS accounts. The document uses IAM to create roles and grant permissions for AWS services (such as eksctl) to access and manage resources. CloudFormation CloudFormation is a service that allows users to automatically create and manage AWS resources using predefined templates. The document refers to CloudFormation during the process of creating an EKS cluster. "
+  },
+  {
+    "uri": "//ducnewbie1.github.io/",
+    "title": "Building EC2 Server-Based CI/CD Pipeline for Websites",
+    "tags": [],
+    "description": "",
+    "content": "AWS Project: Building EC2 Server-Based CI/CD Pipeline for Websites Overview In the Workshop, we will learn how to build an automated CI/CD pipeline to deploy a website to AWS, using popular tools such as Jenkins, Docker, Ansible and Kubernetes.\nMain content Introduction Preparation Jenkins Server Ansible Server K8s Server Testing and Demo Clean-Up-Resources "
+  },
+  {
+    "uri": "//ducnewbie1.github.io/6-test-demo/6.1-ci-cd-pipeline-deployment/",
+    "title": "CI/CD pipeline deployment",
+    "tags": [],
+    "description": "",
+    "content": " Create Jenkins Job for CD Now that the Kubernetes, Ansible, and Ansible for Kubernetes playbook are all set up and ready to go, you can integrate it with Jenkins.\nJenkinsServer → Jenkins Dashboard → New Item.\nCreate a new Jenkins Freestyle project named CD-Job.\nClick the “OK” button. Go to the “Post-build actions” section. Click the “Add post-build action” button. Select the “Send build artifacts via SSH” option. Select “AnsibleServer” as SSH Server. Add this command to the “execute command” input. sudo -u ansible-admin ansible-playbook /opt/docker/kubernetes-hello-app.yml Integrate CD-Job into the complete CI/CD flow. Click the “Apply” and “Save” buttons. Go to Jenkins dashboard → CI_CD_Pipeline → Configure → Post-build actions section. Click the Add post-build action button. Select the Build other projects option. Go to the Build other projects section. Select the Trigger only if build is stable option. Add CD-Job to the Build Project input. Finally in the previous CI/CD pipeline Item, Navigate from Jenkins Dashboad =\u0026gt; Your CI/CD Name =\u0026gt; Configuration "
+  },
+  {
+    "uri": "//ducnewbie1.github.io/2-preparation/2.1-create-vpc/",
+    "title": "Create VPC",
+    "tags": [],
+    "description": "",
+    "content": "We will need an IAM User with access to the S3 bucket to upload, retrieve and delete images in the bucket\nGo to the VPC page by: Type VPC in the service search bar and select ‘VPC’ From the left pane of the VPC dashboard, select VPC and click the Create VPC button. In Create VPC\nSelect Only VPC Enter the Tag name then create Tags as in the instructions Next select Create VPC Successful creation status Create 3 Public subnets for 3 EC2 servers in turn Access VPC =\u0026gt; Subnet =\u0026gt; Click Create subnet Public subnet 1 information Public subnet 2 information Public subnet 3 information Configure VPC Route table Route table (routing table) in AWS VPC (Virtual Private Cloud) plays an important role in determining how packets are routed between networks and subnets in the VPC environment.\nWith the newly created VPC, there are 3 Public subnets for 3 servers, we proceed to configure the route table for them.\n"
+  },
+  {
+    "uri": "//ducnewbie1.github.io/4-ansible-server/4.1-ansible-install/",
+    "title": "Install Ansible",
+    "tags": [],
+    "description": "",
+    "content": "You will now install Ansible on your EC2 “AnsibleServer” instance.\nFirst, connect to EC2 AnsibleSever similar to the step Install Jenkins Select Project: Maven \u0026ndash;\u0026gt; Language: Java \u0026ndash;\u0026gt; SpringBoot: 3.3.3 \u0026ndash;\u0026gt; Packaging: Jar \u0026ndash;\u0026gt; Java: 22 Execute the command: sudo amazon-linux-extras install ansible2 Check the ansible version, we use the command: ansible --version Configure Ansible: Kubernetes Server, SSH key Go to Dashboard → Jenkins Management → System Configuration → Available Plugins Then enter Publish via SSH in the search box. Then click Install to install.\nGo to Dashboard → Jenkins Management → System Configuration → Publish via SSH. Enter all the necessary data of the EC2 Ansible Server in this section:\nAfter clicking the Apply and Save buttons\nNext click on the configuration test section to confirm that the Plugin is working.\n"
+  },
+  {
+    "uri": "//ducnewbie1.github.io/3-jenkins-server/3.1-install-jenkins/",
+    "title": "Install Jenkins",
+    "tags": [],
+    "description": "",
+    "content": "Now you need to download Jenkins on your EC2 virtual server instance.\nGo to the Jenkins download page You can see the options Stable Release (LTS) and Regular Release (Weekly). Select the Red Hat/Fedora/Alma/Rocky/CentOS LTS. option. Go to the Ec2 DashBoard page, select the Ec2 JenkinsServer you created later, select Connect Select Connect Copy the following command and execute it to download the Jenkins files from the Jenkins repository on the Internet and save them to the specified location on your EC2 virtual server instance. sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo Import Jenkins Key To complete the Jenkins installation, we need to import the Jenkins key.\nTo import the Jenkins key, we need to copy the following command and execute it.\nsudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key This way, the rpm package manager can verify that the Jenkins packages you install are exactly the ones published by the Jenkins project and that they are not tampered with or corrupted.\nInstall Java To run Jenkins, we need to install Java on our EC2 VM instance. To install Java, use this command. sudo amazon-linux-extras install java-openjdk17 -y This path may change depending on the time you do this workshop. Verify the Java version on the installed server\nInstall fontconfig To run Jenkins, you need to install fontconfig on our EC2 VM instance. Use this command: sudo yum install fontconfig java-17-openjdk -y Fontconfig is a library designed to provide system-wide font configuration, customization, and application access. It is required by Jenkins because Jenkins has font rendering capabilities. Install Jenkins In the previous steps, you configured your EC2 virtual server instance to use a specific Jenkins repository, and then imported the GPG key associated with that repository. Now, you need to run a command that will search all the repositories it knows about, including the Jenkins repository you added, for the Jenkins package. Once it finds the Jenkins package in the Jenkins repository, it will download and install it. Run this command: sudo yum install jenkins -y Start Jenkins sudo systemctl start jenkins sudo systemctl status jenkins Access Jenkins To access the Jenkins application, open any web browser and enter the public IP address or domain name of your EC2 instance, followed by port 8080. http://\u0026lt;your-ec2-ip\u0026gt;:8080 Create a new Jenkins path The first time you access Jenkins, it will be locked with an automatically generated password. You need to reveal this password with the following command: sudo cat /var/lib/jenkins/secrets/initialAdminPassword Copy this password, go back to your browser, paste it into the Admin Password field and click \u0026ldquo;Continue\u0026rdquo;.\nYou will then be able to see this web page.\nNow, you can use your Jenkins Server. Then create a new Item in Jenkins with the following information:\n"
+  },
+  {
+    "uri": "//ducnewbie1.github.io/5-k8s-server/5.1-install-kubectl-and-eksctl/",
+    "title": "Install kubectl &amp; eksctl",
+    "tags": [],
+    "description": "",
+    "content": " We start the EC2 Kubernetes server. Now, you need to check the old aws-cli version on the EC2 instance, if the version is old, you need to update it. To do that, go to AWS → Documentation → AWS Command Line Interface → User Guide for Version 2. First, connect to EC2 K8sServer similar to step Install Jenkins First, execute this command to download awscli version 2. curl \u0026#34;https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip\u0026#34; -o \u0026#34;awscliv2 Second, you need to execute this command to unzip the awscli version 2 archive. unzip awscliv2.zip Third, you should execute this command to install awscli version 2. sudo ./aws/install Install eksctl First, we install eksctl Eksctl is another command line tool designed designed specifically for the Amazon EKS service. Eksctl can be used to create AWS EKS clusters, manage node groups, and perform EKS-specific tasks, such as integrating with IAM roles and other AWS services, eliminating much of the AWS infrastructure setup and management. Execute the kubectl load command. curl --silent --location \u0026#34;https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz\u0026#34; | tar xz -C /tmp "
+  },
+  {
+    "uri": "//ducnewbie1.github.io/3-jenkins-server/3.2-connect-jenkin-to-github/",
+    "title": "Connect Jenkins to GitHub",
+    "tags": [],
+    "description": "",
+    "content": "To connect Jenkins to Github, you need to:\nInstall Github Plugin in Jenkins. Configure Github Plugin by providing the URL of the Github repository. Go to Dashboard =\u0026gt; Manage Jenkins =\u0026gt; Tools. Then update as follows: Finally, add the repo that needs to apply CI/CD. We move Dashboard =\u0026gt; “CI/CD project name” =\u0026gt; configuration. Paste the github link of the project that needs CI/CD "
+  },
+  {
+    "uri": "//ducnewbie1.github.io/2-preparation/2.2-create-ec2-instance/",
+    "title": "Create EC2 instance",
+    "tags": [],
+    "description": "",
+    "content": "Next Initialize EC2 Instance\nAccess the EC2 service in the AWS console window. After accessing the EC2 service, next in the Instances section select Instances\nNext, select Launch instances to proceed to create an EC2 server for this lab\nAfter knowing the configuration of the servers, we create 3 servers named respectively: JenkinsServer, AnsibleServer, K8sServer.\nBelow is the general configuration of the servers used in the lab.\nAfter finishing this step, we go back to Instances and we will see the list of created servers appear! Create \u0026amp; Configure Security Group Step 1: Access EC2 service =\u0026gt; In Network \u0026amp; Security section =\u0026gt; Select Security Group Step 2: Click Create security group to create a Security Group to configure traffic for the Servers Configuration includes: Configuration details Configure Inbound rules Configure Outbound rules "
+  },
+  {
+    "uri": "//ducnewbie1.github.io/6-test-demo/6.2-test/",
+    "title": "Demo",
+    "tags": [],
+    "description": "",
+    "content": " Click to run the CI/CD flow Click on the flow version to check the status of the pipeline The CI/CD Pipeline is up and running. You can now use this pipeline for your software development process to integrate and deploy code versions continuously. To view the website deployed on the Kubernetes cluster. In the Kubernetes Server, type the command: kubectl get service hmddevops-hello-app-service Kubernetes will display the external-ip address. We copy this code and add the suffix “:8080” to run the website. The result obtained from this: "
+  },
+  {
+    "uri": "//ducnewbie1.github.io/5-k8s-server/5.2-create-iam-role/",
+    "title": "IAM Role Configuration",
+    "tags": [],
+    "description": "",
+    "content": " You need to create an IAM role First, Enter IAM select IAM to enter the IAM page Select Role on the left sidebar then select Create role Enter the Role name Eksctl_Role then select Create role Select EC2 KubernetesServer then select Action -\u0026gt; Security -\u0026gt; Modify IAM role -\u0026gt; Select the newly created IAM role "
+  },
+  {
+    "uri": "//ducnewbie1.github.io/4-ansible-server/4.2-docker-install/",
+    "title": "Install Docker",
+    "tags": [],
+    "description": "",
+    "content": "Now you need to install docker on your Ansible EC2 instance.\nTo do that you need to create a new docker directory. sudo mkdir /opt/docker Now that Docker is installed on your Ansible EC2 instance, you can launch it by executing the following command. sudo systemctl start docker Once Docker is started, you can execute the following command sudo systemctl status docker "
+  },
+  {
+    "uri": "//ducnewbie1.github.io/2-preparation/",
+    "title": "Preparation",
+    "tags": [],
+    "description": "",
+    "content": "Main content Create VPC Create EC2 Intance "
+  },
+  {
+    "uri": "//ducnewbie1.github.io/4-ansible-server/4.3-create-ansible-playbook/",
+    "title": "Create Ansible Playbook",
+    "tags": [],
+    "description": "",
+    "content": "Start by creating a new Ansible playbook file.\nUse the following command touch hello-app.yml Then, edit the newly created hello-app.yml file. Open it for editing with this command. vi hello-app.yml Inside the file, type the following.\n---\r- hosts: ansible\ruser: root\rtasks:\r- name: create docker image\rcommand: docker build -t hello:latest .\rargs:\rchdir: /opt/docker\r- name: create tag to push image onto dockerhub\rcommand: docker tag hello:latest hmddevops/hello:latest\r- name: push docker image onto dockerhub\rcommand: docker push hmddevops/hello:latest "
+  },
+  {
+    "uri": "//ducnewbie1.github.io/3-jenkins-server/",
+    "title": "Jenkins Server",
+    "tags": [],
+    "description": "",
+    "content": "Main content Install Jenkins Connect Jenkins to GitHub Maven Configuration "
+  },
+  {
+    "uri": "//ducnewbie1.github.io/3-jenkins-server/3.3-maven-configuration/",
+    "title": "Maven Configuration",
+    "tags": [],
+    "description": "",
+    "content": "To configure Maven in Jenkins, you need to:\nInstall the Maven Integration Plugin in the Jenkins plugins repository. Configure the path to Maven on the Jenkins server. To download Apache Maven, go to /opt directory cd /opt And then use this command: sudo wget https://dlcdn.apache.org/maven/maven-3/3.9.4/binaries/apache-maven-3.9.4-b Use this command to extract Apache Maven from the downloaded archive: sudo tar -xvzf apache-maven-*.tar.gz After completing the above steps: We are ready to run the Jenkins CI/CD project on the JenkinServer EC2 server "
+  },
+  {
+    "uri": "//ducnewbie1.github.io/5-k8s-server/5.3-setting-up-an-eks-cluster/",
+    "title": "Setting Up an EKS Cluster",
+    "tags": [],
+    "description": "",
+    "content": " The Amazon EKS (Elastic Kubernetes Service) cluster is a managed Kubernetes environment on AWS that automates complex infrastructure tasks like setup, scaling, and maintenance. This is essential because it provides an efficient, secure, and AWS-optimized platform for deploying, managing, and scaling containerized applications, streamlining operations and allowing developers to focus on coding instead of managing the underlying infrastructure.\nNow it\u0026rsquo;s time to set up your EKS cluster.\nTo achieve this, follow these steps:\nModify the following command with your specific information. eksctl create cluster --name cluster-name \\ --region region-name \\ --node-type instance-type \\ --nodes-min 2 \\ --nodes-max 2 \\ --zones \u0026lt;AZ-1\u0026gt;,\u0026lt;AZ-2\u0026gt; Execute the modified command and wait patiently for the cluster creation process to complete. You will notice the EKS cluster status is indicated as \u0026ldquo;creating\u0026rdquo; on the AWS CloudFormation website. The cluster creation process usually takes about 20 minutes. Once completed, the terminal will display the result of the process.\n"
+  },
+  {
+    "uri": "//ducnewbie1.github.io/4-ansible-server/",
+    "title": "Ansible Server",
+    "tags": [],
+    "description": "",
+    "content": "Overview\nNow you will install Ansible on your EC2 “AnsibleServer” server instance. Main content Install Ansible Install Docker Create Ansible Playbook "
+  },
+  {
+    "uri": "//ducnewbie1.github.io/5-k8s-server/",
+    "title": "K8s Server",
+    "tags": [],
+    "description": "",
+    "content": "Overview\nNow you will install Ansible on your EC2 “AnsibleServer” instance. Main content Install kubectl \u0026amp; eksctl Configure IAM Role Setting up an EKS cluster "
+  },
+  {
+    "uri": "//ducnewbie1.github.io/6-test-demo/",
+    "title": "Testing and Demo",
+    "tags": [],
+    "description": "",
+    "content": "Overview\nNow you will install Ansible on your EC2 “AnsibleServer” server instance. Main content CI/CD pipeline deployment Demo "
+  },
+  {
+    "uri": "//ducnewbie1.github.io/7-clean-up-resources/",
+    "title": "Cleaning up resources",
+    "tags": [],
+    "description": "",
+    "content": "Delete EKS Cluster Cleanup with kubectl command When you need to clean up resources in your Kubernetes environment, you can use the following kubectl commands to efficiently remove deployments, pods, and services. Delete all deployments. To delete all deployments, you can use the following command. kubectl delete deployments --all This action ensures that there are no active deployment instances left in your cluster. Delete all pods. If you need to delete all pods, whether they are managed by the deployment process or not, you can use the following command. kubectl delete pods --all Deleting a pod can help reset the state of your cluster or prepare it for a new deployment. Delete all services. To clean up services that expose your application to the network, you can use the following command.\nkubectl delete services --all Deleting services can cause downtime, so consider the implications before proceeding.\nDeleting an Amazon EKS cluster To delete all resources associated with a specified Amazon EKS cluster created with eksctl , including worker nodes, networking components, and other resources, you can use the following command. eksctl delete cluster --name {your cluster name} --region {your region name} eksctl delete cluster --name zufarexplainedit --region eu-north-1 Make sure you are sure about stopping the cluster as this action is irreversible and will result in data loss. Services are automatically created by Cloud Formation so there may be some resources that need to be deleted. Please check the EKS related services carefully to make sure the above commands delete the created resources, avoiding unwanted costs.\nDelete EC2 Instance In the AWS console interface, find and move back to the EC2 service =\u0026gt; “Instance”. Then check the running instances. Check the Instance to be deleted: Then, in the “Instance state” section, select “Terminate (delete) instance” to delete the active EC2 server. Delete services on VPC In AWS Console, we move to VPC service =\u0026gt; find “VPC Dashboard”. Here will display all services related to the running VPC. Just delete all running services to complete resource cleaning. "
+  },
+  {
+    "uri": "//ducnewbie1.github.io/categories/",
+    "title": "Categories",
+    "tags": [],
+    "description": "",
+    "content": ""
+  },
+  {
+    "uri": "//ducnewbie1.github.io/tags/",
+    "title": "Tags",
+    "tags": [],
+    "description": "",
+    "content": ""
+  }
+]
