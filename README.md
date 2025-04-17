@@ -1,6 +1,7 @@
 # 🚀 CI/CD Pipeline using Jenkins, Ansible, Docker & Kubernetes on AWS ☁️
 
-https://github.com/DUCnewbie1/DUCnewbie1.github.io/issues/1#issue-3001501993
+![CI/CD Diagram]([https://user-images.githubusercontent.com/xxx/yyyy.png](https://private-user-images.githubusercontent.com/112816078/434653588-6c16688e-b984-4b7e-afea-2146d0219e29.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NDQ4Njk5MTUsIm5iZiI6MTc0NDg2OTYxNSwicGF0aCI6Ii8xMTI4MTYwNzgvNDM0NjUzNTg4LTZjMTY2ODhlLWI5ODQtNGI3ZS1hZmVhLTIxNDZkMDIxOWUyOS5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjUwNDE3JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI1MDQxN1QwNjAwMTVaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT1lZjI2MTA5NTFmNmVkZGEyYzAyZjExZjhjNjI2ZTg0MjU4YThlMmNkZGEyMzRhNjA0MGRiM2Y5MGRjYzVjZjAwJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.usyGwElOMcqkbVlsXJrHhnbl5PNcLPQ-NDdIGq8WWB0))
+
 
 ## 📌 Mô tả dự án
 
