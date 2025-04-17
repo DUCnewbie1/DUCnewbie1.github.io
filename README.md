@@ -1,6 +1,6 @@
 # 🚀 CI/CD Pipeline using Jenkins, Ansible, Docker & Kubernetes on AWS ☁️
 
-![CI/CD Diagram](./5b3011b6-d9e5-47b2-a232-12e452e9c0ff.png)
+https://github.com/DUCnewbie1/DUCnewbie1.github.io/issues/1#issue-3001501993
 
 ## 📌 Mô tả dự án
 
