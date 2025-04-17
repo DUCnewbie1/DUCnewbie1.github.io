@@ -36,4 +36,5 @@ Quy trình này giúp:
 
 4️⃣ **Kubernetes triển khai ứng dụng**  
 → Image sẽ được kéo và chạy trong các Pod, đảm bảo khả năng mở rộng, tự phục hồi, và cập nhật liên tục.
+## Đường dẫn đến workshop: https://ducnewbie1.github.io/
 
